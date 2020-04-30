@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Dynamic;
 using System.Linq;
-
+using System.Text;
+using System.Threading.Tasks;
 namespace LinqConsoleApp
 {
     public class LinqSamples
     {
         public static IEnumerable<Emp> Emps { get; set; }
         public static IEnumerable<Dept> Depts { get; set; }
+
 
         public LinqSamples()
         {
@@ -197,16 +203,22 @@ namespace LinqConsoleApp
             //}
 
             //1. Query syntax (SQL)
-            var res = from emp in Emps
-                      where emp.Job == "Backend programmer"
-                      select new
-                      {
-                          Nazwisko = emp.Ename,
-                          Zawod = emp.Job
-                      };
+            // var res = from emp in Emps
+            //           where emp.Job == "Backend programmer"
+            //           select new
+            //           {
+            //               Nazwisko = emp.Ename,
+            //               Zawod = emp.Job
+            //           };
 
+            
 
             //2. Lambda and Extension methods
+
+            var res = Emps.Where(emp => emp.Job == "Backend programmer").ToList();
+
+            
+
         }
 
         /// <summary>
@@ -214,8 +226,10 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad2()
         {
-            
 
+            var res2 = Emps.Where(emp => emp.Job == "Frontend programmer" && emp.Salary > 1000)
+                .OrderByDescending(emp => emp.Ename).ToList();
+            
         }
 
         /// <summary>
@@ -223,7 +237,8 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad3()
         {
-          
+            var res3 = Emps.Max(emp => emp.Salary);
+
         }
 
         /// <summary>
@@ -231,6 +246,8 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad4()
         {
+            var max = Emps.Max(emp => emp.Salary);
+            var res4 = Emps.Where(emp => emp.Salary == max).ToList();
 
         }
 
@@ -239,6 +256,11 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad5()
         {
+            var res5 = Emps.Select(emp => new
+            {
+                Nazwisko = emp.Ename,
+                Praca = emp.Job
+            }).ToList();
 
         }
 
@@ -249,7 +271,18 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad6()
         {
+            var res6 = Emps
+            .Join(Depts, emp => emp.Deptno, dept => dept.Deptno, (emp, dept) => new
+            {
+                emp,
+                dept
+            }).Select(empno => new
+            {
+                empno.emp.Ename,
+                empno.emp.Job,
+                empno.dept.Dname
 
+            }).ToList();
         }
 
         /// <summary>
@@ -257,7 +290,7 @@ namespace LinqConsoleApp
         /// </summary>
         public void Przyklad7()
         {
-
+            var count = Emps.Count(emp => emp.)
         }
 
         /// <summary>
